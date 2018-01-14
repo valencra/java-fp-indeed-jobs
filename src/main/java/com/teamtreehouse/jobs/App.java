@@ -7,9 +7,11 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.swing.text.html.Option;
 
 public class App {
 
@@ -44,12 +46,25 @@ public class App {
     // get snippet words counts
     getSnippetWordCountsStream(jobs).forEach((word, count) -> System.out.printf("%s has %d instances%n", word, count));
 
+    // company with max name length
     System.out.println(
         jobs.stream()
             .map(Job::getCompany)
             .max(Comparator.comparingInt(String::length))
     );
 
+    // find first Java job
+    Optional<Job> foundJob = luckySearchJob(jobs, "Java");
+    System.out.println(foundJob
+        .map(Job::getTitle)
+        .orElse("No jobs found")
+    );
+  }
+
+  private static Optional<Job> luckySearchJob(List<Job> jobs, String searchTerm) {
+    return jobs.stream()
+        .filter(job -> job.getTitle().contains(searchTerm))
+        .findFirst();
   }
 
   private static List<Job> getThreeJuniorJobsStream(List<Job> jobs) {
