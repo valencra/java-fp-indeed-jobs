@@ -5,7 +5,10 @@ import com.teamtreehouse.jobs.service.JobService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class App {
 
@@ -36,6 +39,9 @@ public class App {
 
     // 3 captions
     getCaptionsStream(jobs).forEach(System.out::println);
+
+    // get snippet words counts
+    getSnippetWordCountsStream(jobs).forEach((word, count) -> System.out.printf("%s has %d instances%n", word, count));
   }
 
   private static List<Job> getThreeJuniorJobsStream(List<Job> jobs) {
@@ -56,5 +62,18 @@ public class App {
   private static boolean isJuniorJob(Job job) {
     String title = job.getTitle().toLowerCase();
     return title.contains("junior") || title.contains("jr");
+  }
+
+  public static Map<String, Long> getSnippetWordCountsStream(List<Job> jobs) {
+    return jobs.stream()
+        .map(Job::getSnippet)
+        .map(snippet -> snippet.split("\\W+"))
+        .flatMap(Stream::of)
+        .filter(word -> word.length() > 0)
+        .map(String::toLowerCase)
+        .collect(Collectors.groupingBy(
+            Function.identity(),
+            Collectors.counting()
+        ));
   }
 }
