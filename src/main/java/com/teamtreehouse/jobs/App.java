@@ -61,11 +61,13 @@ public class App {
         .orElse("No jobs found")
     );
 
+    // get distinct, sorted list of companies
     List<String> companies = jobs.stream()
         .map(Job::getCompany)
         .distinct()
         .sorted()
         .collect(Collectors.toList());
+    // use range to display first 20 companies
     displayCompaniesMenuUsingRange(companies);
   }
 
