@@ -33,11 +33,22 @@ public class App {
 
     // 3 junior jobs
     getThreeJuniorJobsStream(jobs).forEach(System.out::println);
+
+    // 3 captions
+    getCaptionsStream(jobs).forEach(System.out::println);
   }
 
   private static List<Job> getThreeJuniorJobsStream(List<Job> jobs) {
     return jobs.stream()
         .filter(App::isJuniorJob)
+        .limit(3)
+        .collect(Collectors.toList());
+  }
+
+  private static List<String> getCaptionsStream(List<Job> jobs) {
+    return jobs.stream()
+        .filter(App::isJuniorJob)
+        .map(job -> String.format("%s is looking for a %s in %s", job.getCompany(), job.getTitle(), job.getCity()))
         .limit(3)
         .collect(Collectors.toList());
   }
