@@ -69,6 +69,15 @@ public class App {
         .collect(Collectors.toList());
     // use range to display first 20 companies
     displayCompaniesMenuUsingRange(companies);
+
+    int pageSize = 20;
+    int numPages = companies.size() / pageSize;
+
+    // stream of every 20 companies
+    IntStream.iterate(1, i -> i+pageSize)
+        .mapToObj(i->String.format("%d. %s", i, companies.get(i)))
+        .limit(numPages)
+        .forEach(System.out::println);
   }
 
   private static void displayCompaniesMenuUsingRange(List<String> companies) {
