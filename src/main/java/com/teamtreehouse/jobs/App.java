@@ -4,6 +4,7 @@ import com.teamtreehouse.jobs.model.Job;
 import com.teamtreehouse.jobs.service.JobService;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -42,6 +43,13 @@ public class App {
 
     // get snippet words counts
     getSnippetWordCountsStream(jobs).forEach((word, count) -> System.out.printf("%s has %d instances%n", word, count));
+
+    System.out.println(
+        jobs.stream()
+            .map(Job::getCompany)
+            .max(Comparator.comparingInt(String::length))
+    );
+
   }
 
   private static List<Job> getThreeJuniorJobsStream(List<Job> jobs) {
