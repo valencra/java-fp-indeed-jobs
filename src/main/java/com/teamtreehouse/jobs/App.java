@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import javax.swing.text.html.Option;
 
@@ -59,6 +60,19 @@ public class App {
         .map(Job::getTitle)
         .orElse("No jobs found")
     );
+
+    List<String> companies = jobs.stream()
+        .map(Job::getCompany)
+        .distinct()
+        .sorted()
+        .collect(Collectors.toList());
+    displayCompaniesMenuUsingRange(companies);
+  }
+
+  private static void displayCompaniesMenuUsingRange(List<String> companies) {
+    IntStream.rangeClosed(1, 20)
+        .mapToObj(i -> String.format("%d. %s", i, companies.get(i-1)))
+        .forEach(System.out::println);
   }
 
   private static Optional<Job> luckySearchJob(List<Job> jobs, String searchTerm) {
